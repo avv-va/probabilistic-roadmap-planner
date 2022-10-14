@@ -1,4 +1,6 @@
 from cmath import inf
+from operator import index
+from platform import node
 from shapely.geometry import LineString, Point
 
 import random
@@ -39,8 +41,8 @@ class PRM:
                 xy_samples.append(sampled_point)
         return xy_samples
 
-    def edge_is_valid(self, node1, node2):
-        if dist(node1.point, node2.point) > self.r:
+    def edge_is_valid(self, node1, node2, smooth_mode = False):
+        if not smooth_mode and dist(node1.point, node2.point) > self.r:
             return False
 
         line = LineString([[node1.point[0], node1.point[1]],
@@ -99,6 +101,21 @@ class PRM:
 
     def draw_map(self):
         draw_map(self.graph, self.start_node, self.goal_node, self.x_range, self.y_range, self.obstacles, self.path)
+    
+    def smooth_pathing(self):
+        several_times = round(len(self.path)/2)
+        for _ in range(0, several_times):
+            indexes = [i for i in range(0, len(self.path))]
+            i_j = random.sample(indexes, k = 2)
+            i, j = i_j[0], i_j[1]
+            node_i, node_j = self.path[i], self.path[j]
+            if self.edge_is_valid(node_i, node_j, smooth_mode=True):
+                if i < j:
+                    self.path = self.path[0:i+1] + self.path[j:]
+                else:
+                    self.path = self.path[0:j+1] + self.path[i:]
+        return self.path
+
 
     def path_planning(self):
         xy_samples = self.sample()
