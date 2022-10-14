@@ -17,5 +17,5 @@ if __name__ == "__main__":
     n, r, start, goal, x_range, y_range, obstacles = get_input_a()
     prm = PRM(n, r, start, goal, x_range, y_range, obstacles)
     prm.path_planning()
-    
-    pass
+    prm.draw_map()
+    # prm.print_details()

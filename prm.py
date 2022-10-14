@@ -1,5 +1,4 @@
 from cmath import inf
-from tracemalloc import start
 from shapely.geometry import LineString, Point
 
 import random
@@ -88,12 +87,21 @@ class PRM:
         nodes.append(goal_node)
 
         graph = Graph(nodes, edges)
-
         return graph, start_node, goal_node
+
+    def print_details(self):
+        print("path is: ", end='')
+        for node in self.path:
+            print(node.point, end=", ")
+        print()
+        print(f"path length: {len(self.path) - 1}")
+        print(f"computation time is: {self.computation_time}")
+
+    def draw_map(self):
+        draw_map(self.graph, self.start_node, self.goal_node, self.x_range, self.y_range, self.obstacles, self.path)
 
     def path_planning(self):
         xy_samples = self.sample()
-        graph, start_node, goal_node = self.form_graph(xy_samples)
-        a_star(graph, start_node, goal_node)
-        draw_map(graph, start_node, goal_node,
-                 self.x_range, self.y_range, self.obstacles)
+        self.graph, self.start_node, self.goal_node = self.form_graph(xy_samples)
+        self.path, self.iterations, self.computation_time, self.found_solution = a_star(self.graph, self.start_node, self.goal_node)
+        return self.path, self.iterations, self.computation_time, self.graph, self.start_node, self.goal_node, self.found_solution
