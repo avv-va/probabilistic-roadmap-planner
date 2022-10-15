@@ -50,12 +50,12 @@ def get_input_c():
 
 
 if __name__ == "__main__":
-    n, r, start, goal, x_range, y_range, obstacles = get_input_c()
+    n, r, start, goal, x_range, y_range, obstacles = get_input_a()
     prm = PRM(n, r, start, goal, x_range, y_range, obstacles)
+    
     prm.path_planning()
-
-    # prm.draw_map()
-    prm.smooth_pathing()
     # prm.draw_map()
 
+    # prm.smooth_pathing()
+    prm.draw_map()
     prm.print_details()
